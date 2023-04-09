@@ -27,6 +27,10 @@ $this->title = 'Profile';
                      class="rounded-3 img-thumbnail"
                      style="width: 150px;"
                      alt="Avatar"/>
+                <div class="btn btn-light btn-rounded" style="width: 80%">
+                    <label class="form-label text-black" for="customFile2">Выберите файл</label>
+                    <input type="file" class="form-control d-none" id="customFile2" onchange="submit()"/>
+                </div>
             </div>
             <div class="col-3">
                 <h5><?= Yii::$app->user->identity->username;?></h5>

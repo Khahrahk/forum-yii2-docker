@@ -6,6 +6,7 @@ use yii\data\ActiveDataProvider;
 use yii\grid\CheckboxColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use app\components\COMMENTWidget;
 
 ?>
 <div class="container my-2 py-2">
@@ -125,4 +126,5 @@ use yii\helpers\Html;
         </div>
     </div>
 </div>
+<?= COMMENTWidget::widget([]) ?>
 

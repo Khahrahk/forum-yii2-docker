@@ -14,8 +14,7 @@ use yii\base\Model;
 
 class CommentForm extends Model
 {
-    public $header;
-    public $body;
+    public $text;
     public $verifyCode;
 
 
@@ -26,7 +25,7 @@ class CommentForm extends Model
     {
         return [
             // name, email, subject and body are required
-            [['header', 'body'], 'required'],
+            [['text'], 'required'],
             // verifyCode needs to be entered correctly
             ['verifyCode', 'captcha'],
         ];
@@ -38,8 +37,7 @@ class CommentForm extends Model
     public function attributeLabels()
     {
         return [
-            'header' => 'Заголовок',
-            'body' => 'Текст',
+            'text' => 'Текст',
             'verifyCode' => 'Капча',
         ];
     }
@@ -53,13 +51,11 @@ class CommentForm extends Model
         if(!$this->validate()){
             return null;
         }
-        $post = new Posts();
-        $post->userId = Yii::$app->user->identity->id;
-        $post->sectionId = Yii::$app->request->get('id');;
-        $post->header = $this->header;
-        $post->body = $this->body;
-        $post->created_at = date('Y-m-d H:i:s');
+        $comment = new Comments();
+        $comment->userId = Yii::$app->user->identity->id;
+        $comment->postId = Yii::$app->request->get('id');;
+        $comment->text = $this->text;
 
-        return $post->save()  ? true : null;
+        return $comment->save()  ? true : null;
     }
 }

@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Widget;
 use app\models\PostForm;
 
-class FBFWidget extends Widget
+class POSTWidget extends Widget
 {
 
     public function run()
@@ -16,9 +16,10 @@ class FBFWidget extends Widget
             Yii::$app->session->setFlash('contactFormSubmitted');
             Yii::$app->response->redirect(['site/sectionview', 'id' => $_GET['id']]);
         }
-        return $this->render('fbfWidget', [
+        return $this->render('postWidget', [
             'model' => $model,
         ]);
     }
 
 }
+

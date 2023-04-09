@@ -2,7 +2,6 @@
 
 /** @var yii\web\View $this */
 
-use app\models\Groups;
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 use yii\helpers\Url;
@@ -21,6 +20,16 @@ $this->title = 'User';
             <div class="col-3">
                 <h5><?php echo $query['username']; ?></h5>
             </div>
+            <?php
+            if(!empty($query['friends']) and $query['friends']['friend_one'] == $query['id']) {
+                echo Html::a('Удалить', ['friendsdelete', 'id' => $query['id']]);
+            } elseif($query['id'] == Yii::$app->user->identity->id) {
+
+            }
+            else {
+                echo Html::a('Добавить', ['friendsadd', 'id' => $query['id']]);
+            }
+            ?>
         </div>
     </div>
     <div class="col-2"></div>

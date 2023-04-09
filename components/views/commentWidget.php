@@ -22,17 +22,14 @@ use yii\captcha\Captcha;
         <div class="modal-content">
             <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Создание поста</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Создание комментария</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
 
-                <?= $form->field($model, 'header') ?>
-
-                <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
-
+                <?= $form->field($model, 'text')->textarea(['rows' => 3, 'cols' => 5]) ?>
                 <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                     'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
                 ]) ?>

@@ -24,6 +24,11 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return 'users';
     }
 
+    public function getFriends()
+    {
+        return $this->hasOne(Friends::className(), ['friend_one' => 'id']);
+    }
+
     public function getPosts()
     {
         return $this->hasOne(Posts::className(), ['id' => 'userId']);

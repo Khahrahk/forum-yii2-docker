@@ -10,7 +10,6 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
-use app\components\FBFWidget;
 
 AppAsset::register($this);
 
@@ -71,7 +70,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <?= $content ?>
     </div>
 </main>
-<?= FBFWidget::widget([]) ?>
 <footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
         <div class="row text-muted">
