@@ -29,21 +29,37 @@ $this->title = 'User';
         <br>
         <?php
         foreach ($query as $key => $item) {
+            if ($item['usertwo']['id'] == Yii::$app->user->identity->id) {
+                $item_user = $item['userone'];
+                $verification_one = $item['verification_one'];
+                $verification_two = $item['verification_two'];
+
+            } else {
+                $item_user = $item['usertwo'];
+                $verification_one = $item['verification_two'];
+                $verification_two = $item['verification_one'];
+            }
             ?>
             <div class="row border border-1 rounded-1 p-3">
                 <div class="col-3">
-                    <img src="<?php echo '/img/avatar/' . $item['users'][0]['avatar']; ?>"
+                    <img src="<?php echo '/img/avatar/' . $item_user['avatar']; ?>"
                          class="rounded-3 img-thumbnail"
                          style="width: 150px;"
                          alt="Avatar"/>
                 </div>
                 <div class="col-3">
                     <?php
-                    echo Html::a($item['users'][0]['username'], ['profileview', 'id' => $item['users'][0]['id']]);
+                    echo Html::a($item_user['username'], ['profileview', 'id' => $item_user['id']]);
                     ?>
                 </div>
                 <?php
-                echo Html::a('Удалить', ['friendsdelete', 'id' => $item['users'][0]['id']]);
+                if ($verification_one == 1 and $verification_two == 1) {
+                    echo Html::a('Удалить', ['friendsdelete', 'id' => $item_user['id']]);
+                } elseif ($verification_one == 0 and $verification_two == 1) {
+                    echo Html::a('Удалить заявку', ['friendsdelete', 'id' => $item_user['id']]);
+                } else {
+                    echo Html::a('Принять заявку', ['friendsverificate', 'id' => $item_user['id']]);
+                }
                 ?>
             </div>
             <br>

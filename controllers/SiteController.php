@@ -233,7 +233,7 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        $query_friends = Friends::find()->joinWith(['users'])->where(['friends.friend_one' => Yii::$app->user->identity->id])
+        $query_friends = Friends::find()->joinWith(['userone', 'usertwo'])->where(['friends.friend_one' => Yii::$app->user->identity->id])
             ->orWhere(['friends.friend_two' => Yii::$app->user->identity->id])->asArray()->all();
             return $this->render('users/friends', [
                 'query' => $query_friends,
@@ -245,8 +245,8 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        Friends::find()->where(['friend_one' => $id])
-            ->andWhere(['friend_two' => Yii::$app->user->identity->id])->one()->delete();
+        Friends::find()->where(['friend_one' => $id])->orWhere(['friend_two' => $id])
+            ->andWhere(['friend_two' => Yii::$app->user->identity->id])->orWhere(['friend_one' => Yii::$app->user->identity->id])->one()->delete();
         return $this->redirect(['site/friends']);
     }
 
@@ -264,14 +264,34 @@ class SiteController extends Controller
         }
     }
 
-    public function actionProfileview($id)
+    public function actionFriendsverificate($id)
     {
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        $query_user = User::find()->joinWith('friends')->where(['users.id' => $id])->asArray()->one();
+        $model = new Friends();
+        if ($id == Yii::$app->user->identity->id) {
+            Yii::$app->response->redirect(['site/friends']);
+        } else {
+            $model->friendUpdate($id);
+            Yii::$app->response->redirect(['site/friends']);
+        }
+    }
+
+    public function actionProfileview($id)
+    {
+        $query_user = User::find()
+            ->where(['users.id' => $id])
+            ->asArray()->one();
+        $query_oof = Friends::find($query_user)->where(['friend_one' => $id])->orWhere(['friend_two' => $id])
+            ->andWhere(['friend_two' => Yii::$app->user->identity->id])->orWhere(['friend_one' => Yii::$app->user->identity->id])->asArray()->one();
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         return $this->render('users/view', [
             'query' => $query_user,
+            'query_friend' => $query_oof
         ]);
     }
 }
