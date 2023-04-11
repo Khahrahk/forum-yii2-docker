@@ -30,22 +30,23 @@ use app\components\COMMENTWidget;
                     </h4>
                     <hr>
                     <?php
-                    if (!empty($item['usercomments'])){
+                    if (!empty($item['usercomments'])) {
                         ?>
                         <div class="row">
                             <div class="col">
                                 <div class="d-flex flex-start">
-                                    <img src="<?php echo '/img/avatar/' . $item['users']['avatar'];?>" class="rounded-3" width="65" height="65"
-                                         alt="Avatar"  style="margin-right: 10px;"/>
+                                    <img src="<?php echo '/img/avatar/' . $item['users']['avatar']; ?>"
+                                         class="rounded-3" width="65" height="65"
+                                         alt="Avatar" style="margin-right: 10px;"/>
                                     <div class="flex-grow-1 flex-shrink-1">
                                         <div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <p class="mb-1">
                                                     <?php
-                                                    echo $item['header'].' ';
+                                                    echo $item['header'] . ' ';
                                                     echo Html::a($item['users']['username'], ['profileview', 'id' => $item['users']['id']]);
                                                     ?><span class="small"><?php
-                                                        echo ' '.$item['created_at'].' ';?></span>
+                                                        echo ' ' . $item['created_at'] . ' '; ?></span>
                                                 </p>
                                             </div>
                                             <p class="small mb-0">
@@ -61,52 +62,59 @@ use app\components\COMMENTWidget;
                         <br>
                         <br>
                         <?php
-                    foreach ($item['usercomments'] as $item1 => $oof) {
+                        foreach ($item['comments'] as $item1) {
+                            foreach ($item['usercomments'] as $item2) {
+                                if ($item2['id'] == $item1['userId']) {
+                                    ?>
+                                    <div class="row">
+                                        <div class="col card-header border-light" style="padding-left: 40px">
+                                            <div class="d-flex flex-start">
+                                                <img src="<?php echo '/img/avatar/' . $item2['avatar']; ?>"
+                                                     class="rounded-3"
+                                                     width="65" height="65"
+                                                     alt="Avatar" style="margin-right: 10px;"/>
+                                                <div class="flex-grow-1 flex-shrink-1">
+                                                    <div>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <p class="mb-1">
+                                                                <?php
+                                                                echo Html::a($item2['username'], ['profileview', 'id' => $item2['id']]);
+                                                                ?><span class="small"><?php
+                                                                    echo ' ' . $item2['created_at'] . ' '; ?></span>
+                                                            </p>
+                                                        </div>
+                                                        <p class="small mb-0">
+                                                            <?php
+                                                            echo $item1['text'];
+                                                            ?>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <?php
+                                }
+                            }
+                        }
+                    }    else {
                         ?>
                         <div class="row">
-                            <div class="col card-header border-light" style="padding-left: 40px">
+                            <div class="col">
                                 <div class="d-flex flex-start">
-                                    <img src="<?php echo '/img/avatar/' . $oof['avatar']; ?>" class="rounded-3"
-                                         width="65" height="65"
+                                    <img src="<?php echo '/img/avatar/' . $item['users']['avatar']; ?>"
+                                         class="rounded-3" width="65" height="65"
                                          alt="Avatar" style="margin-right: 10px;"/>
                                     <div class="flex-grow-1 flex-shrink-1">
                                         <div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <p class="mb-1">
                                                     <?php
-                                                    echo Html::a($oof['username'], ['profileview', 'id' => $oof['id']]);
-                                                    ?><span class="small"><?php
-                                                        echo ' ' . $oof['created_at'] . ' '; ?></span>
-                                                </p>
-                                            </div>
-                                            <p class="small mb-0">
-                                                <?php
-                                                echo $item['comments'][$item1]['text'];
-                                                ?>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                    <?php }
-                    } else {
-                        ?>
-                        <div class="row">
-                            <div class="col">
-                                <div class="d-flex flex-start">
-                                    <img src="<?php echo '/img/avatar/' . $item['users']['avatar'];?>" class="rounded-3" width="65" height="65"
-                                         alt="Avatar"  style="margin-right: 10px;"/>
-                                    <div class="flex-grow-1 flex-shrink-1">
-                                        <div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <p class="mb-1">
-                                                    <?php
-                                                    echo $item['header'].' ';
+                                                    echo $item['header'] . ' ';
                                                     echo Html::a($item['users']['username'], ['profileview', 'id' => $item['users']['id']]);
                                                     ?><span class="small"><?php
-                                                        echo ' '.$item['created_at'].' ';?></span>
+                                                        echo ' ' . $item['created_at'] . ' '; ?></span>
                                                 </p>
                                             </div>
                                             <p class="small mb-0">
@@ -119,7 +127,7 @@ use app\components\COMMENTWidget;
                                 </div>
                             </div>
                         </div>
-                    <?php
+                        <?php
                     } ?>
                 </div>
             </div>

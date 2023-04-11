@@ -13,8 +13,15 @@ class COMMENTWidget extends Widget
     public function run()
     {
         $model = new CommentForm();
-        if ($model->load(Yii::$app->request->post()) && $model->create()) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->load(Yii::$app->request->post()) && $model->create()) {
+                Yii::$app->session->setFlash('contactFormSubmitted');
+                $transaction->commit();
+                Yii::$app->response->redirect(['site/postview', 'id' => $_GET['id']]);
+            }
+        } catch (\Exception $e) {
+            $transaction->rollback();
             Yii::$app->response->redirect(['site/postview', 'id' => $_GET['id']]);
         }
         return $this->render('commentWidget', [

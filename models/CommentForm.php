@@ -53,7 +53,7 @@ class CommentForm extends Model
         }
         $comment = new Comments();
         $comment->userId = Yii::$app->user->identity->id;
-        $comment->postId = Yii::$app->request->get('id');;
+        $comment->postId = Yii::$app->request->get('id');
         $comment->text = $this->text;
 
         return $comment->save()  ? true : null;

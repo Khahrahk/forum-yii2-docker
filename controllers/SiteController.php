@@ -162,22 +162,6 @@ class SiteController extends Controller
         return $this->render('search', ['pagination' => $pagination, 'model' => $model, 'sort' => $sort]);
     }
 
-    public function actionPostcreate()
-    {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-        $model = new PostForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->create()) {
-                return $this->redirect(['numbers']);
-            }
-        }
-        return $this->render('post/create', [
-            'model' => $model,
-        ]);
-    }
-
     public function actionSectionview($id)
     {
         if (Yii::$app->user->isGuest) {
@@ -245,9 +229,20 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        Friends::find()->where(['friend_one' => $id])->orWhere(['friend_two' => $id])
-            ->andWhere(['friend_two' => Yii::$app->user->identity->id])->orWhere(['friend_one' => Yii::$app->user->identity->id])->one()->delete();
-        return $this->redirect(['site/friends']);
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (Friends::find()->where(['friend_one' => $id])->orWhere(['friend_two' => $id])
+                ->andWhere(['friend_two' => Yii::$app->user->identity->id])->orWhere(['friend_one' => Yii::$app->user->identity->id])->one()->delete()) {
+                $transaction->commit();
+                Yii::$app->response->redirect(['site/friends']);
+            } else {
+                $transaction->rollback();
+                Yii::$app->response->redirect(['site/friends']);
+            }
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            Yii::$app->response->redirect(['site/friends']);
+        }
     }
 
     public function actionFriendsadd($id)
@@ -256,10 +251,17 @@ class SiteController extends Controller
             return $this->goHome();
         }
         $model = new Friends();
-        if ($id == Yii::$app->user->identity->id) {
-            Yii::$app->response->redirect(['site/friends']);
-        } else {
-            $model->create($id);
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->create($id) and $id != Yii::$app->user->identity->id) {
+                $transaction->commit();
+                Yii::$app->response->redirect(['site/friends']);
+            } else {
+                $transaction->rollback();
+                Yii::$app->response->redirect(['site/friends']);
+            }
+        } catch (\Exception $e) {
+            $transaction->rollback();
             Yii::$app->response->redirect(['site/friends']);
         }
     }
@@ -270,10 +272,17 @@ class SiteController extends Controller
             return $this->goHome();
         }
         $model = new Friends();
-        if ($id == Yii::$app->user->identity->id) {
-            Yii::$app->response->redirect(['site/friends']);
-        } else {
-            $model->friendUpdate($id);
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->friendUpdate($id) and $id != Yii::$app->user->identity->id) {
+                $transaction->commit();
+                Yii::$app->response->redirect(['site/friends']);
+            } else {
+                $transaction->rollback();
+                Yii::$app->response->redirect(['site/friends']);
+            }
+        } catch (\Exception $e) {
+            $transaction->rollback();
             Yii::$app->response->redirect(['site/friends']);
         }
     }

@@ -14,12 +14,16 @@ $this->title = 'Главная';
 <h3 style="padding-left: 40%">Разделы</h3>
 <br>
 <div class="row">
-    <div class='col-3'>
+    <div class="col-2"></div>
+    <div class='col-8'>
+        <h5>
 <?php
 foreach ($model as $item) {
-    echo Html::a($item->name, ['sectionview', 'id' => $item->id]);
+    echo Html::a($item->name, ['sectionview', 'id' => $item->id], ['class' => 'nav-link']);
     echo "<br>";
 }
 ?>
+        </h5>
     </div>
+    <div class="col-2"></div>
 </div>

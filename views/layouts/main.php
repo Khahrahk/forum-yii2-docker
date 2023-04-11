@@ -43,18 +43,23 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'items' => [
             ['label' => 'Главная    ', 'url' => ['/site/index']],
             ['label' => 'Вход', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
-            ['label' => 'Профиль', 'url' => ['/site/profile'], 'visible' => !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin == 0],
             ['label' => 'Панель администратора', 'url' => ['/site/admin'], 'visible' => !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin == 1],
             Yii::$app->user->isGuest
                 ? ['label' => 'Регистрация', 'url' => ['/site/register']]
-                : '<li class="nav-item">'
-                . Html::beginForm(['/site/logout'])
-                . Html::submitButton(
-                    'Выход (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'nav-link btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>',
+                :
+                ['label' => Yii::$app->user->identity->username,
+                    'url' => ['#'],
+                    'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
+                    'items' => [
+                        ['label' => 'Профиль', 'url' => '/site/profile'],
+                        ['label' => 'Друзья', 'url' => '/site/friends'],
+                        Html::beginForm(['/site/logout'])
+                        . Html::submitButton(
+                            'Выход',
+                            ['class' => 'btn btn-link text-black rounded-0 logout dropdown-item'])
+                        . Html::endForm()
+                    ],
+                ],
         ]
     ]);
     NavBar::end();
