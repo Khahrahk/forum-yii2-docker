@@ -16,6 +16,8 @@ class m230407_192159_create_friends_table extends Migration
             'id' => $this->primaryKey(),
             'friend_one' => $this->integer()->notNull(),
             'friend_two' => $this->integer()->notNull(),
+            'verification_one' => $this->boolean()->defaultValue(0),
+            'verification_two' => $this->boolean()->defaultValue(0),
         ]);
 
         $this->addForeignKey('fk_user_friends_one', 'friends', 'friend_one', 'users', 'id');

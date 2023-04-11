@@ -19,6 +19,7 @@ class m230402_183328_create_posts_table extends Migration
             'header' => $this->string(256)->notNull(),
             'body' => $this->string(1000)->notNull(),
             'media' => $this->string(256),
+            'created_at' => $this->timestamp(),
         ]);
 
         $this->addForeignKey('fk_user_post', 'posts', 'userId', 'users', 'id');

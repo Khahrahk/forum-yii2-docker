@@ -15,7 +15,8 @@ class m230401_183259_create_users_table extends Migration
         $this->createTable('{{%users}}', [
             'id' => $this->primaryKey(),
             'username' => $this->string(256)->notNull(),
-            'password' => $this->string(256)->notNull(),
+            'password' => $this->string(256),
+            'avatar' => $this->integer(2)->defaultValue(0),
             'isAdmin' => $this->integer(2)->defaultValue(0),
             'email' => $this->string(1000)->notNull(),
             'number' => $this->string(256),
